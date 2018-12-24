@@ -12,8 +12,6 @@ from flask_pymongo import PyMongo
 from flask_wtf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 
-
-
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 Principal(app)
@@ -30,6 +28,15 @@ app.secret_key = "liangzhanning"
 app.config["WTF_CSRF_SECRET_KEY"] = app.secret_key
 app.config["WTF_CSRF_TIME_LIMIT"] = 7200
 
+
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return JSONEncoder.default(self, o)
+
+
+app.json_encoder = CustomJSONEncoder
 db = SQLAlchemy(app)
 # login setting
 login_manager.login_view = "base.login"  # 用户未登录时候重定向到的登录页面

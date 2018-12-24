@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+import random
 
 from pm_burndown import mongo
 
@@ -11,14 +12,23 @@ def init_project():
              end_time=datetime.datetime.strptime("2019-2-1", "%Y-%m-%d"), people=[f"user_{i}" for i in range(10)])
     )
 
+
 def init_sprint():
-    mongo.db.sprint.insert_one(
+    sprint_id = mongo.db.sprint.insert_one(
         dict(belong_project="project_1", sprint_name="冲刺1",
              start_time=datetime.datetime.strptime("2018-12-1", "%Y-%m-%d"),
              end_time=datetime.datetime.strptime("2018-1-1", "%Y-%m-%d"))
-    )
-    for i in range(50):
-        mongo.db.sprint.insert_one(dict())
+    ).inserted_id
+    people = [f"user_{i}" for i in range(10)]
+    for person in people:
+        for one_task in range(20):
+            mongo.db.task.insert_one(dict(
+                sprint_id=sprint_id,
+                person=person,
+                task_name=f"task_{one_task}_for_{person}",
+                content=f"finish {one_task} for {person}",
+                hour=random.randint(1,20)
+            ))
 
 
 def init_user():
