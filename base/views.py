@@ -82,10 +82,6 @@ def index():
     user_form = NewUserForm()
     return render_template('base/index.html', new_user_form=user_form)
 
-@base.route("projects/",methods=['GET'])
-def projects():
-
-    return json.jsonify([one for one in mongo.db.project.find()])
 
 @base.route("logout/")
 @login_required
@@ -101,3 +97,65 @@ def logout():
     identity_changed.send(current_app._get_current_object(),
                           identity=AnonymousIdentity())
     return redirect(url_for(".login"))
+
+
+@base.route("project/", methods=['GET'])
+def project_sprint_page():
+    """项目中冲刺页面"""
+
+    return render_template('base/project_sprint.html')
+
+
+@base.route("sprint/", methods=['GET'])
+def sprint_task_page():
+    """
+    冲刺任务页面
+
+    :return:
+    """
+
+    return render_template('base/sprint_task.html')
+
+
+@base.route("projects/", methods=['GET'])
+def projects():
+    """
+    项目列表
+
+    :return:
+    """
+
+    return json.jsonify([one for one in mongo.db.project.find()])
+
+
+@base.route("sprints/", methods=['GET'])
+def sprints():
+    """
+    冲刺列表
+
+    :return:
+    """
+
+    return json.jsonify([one for one in mongo.db.project.find()])
+
+
+@base.route("tasks/", methods=['GET'])
+def tasks():
+    """
+    任务列表
+
+    :return:
+    """
+
+    return json.jsonify([one for one in mongo.db.project.find()])
+
+
+@base.route("change_task/", methods=['POST'])
+def change_task():
+    """
+    修改任务状态
+
+    :return:
+    """
+
+    return json.jsonify([one for one in mongo.db.project.find()])

@@ -18,7 +18,7 @@ def init_sprint():
              end_time=datetime.datetime.strptime("2018-1-1", "%Y-%m-%d"))
     )
     for i in range(50):
-        mongo.db.sprint.insert_one
+        mongo.db.sprint.insert_one(dict())
 
 
 def init_user():

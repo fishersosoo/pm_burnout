@@ -1,4 +1,4 @@
-var $user_table = $("#user_table");
+var $project_table = $("#project_table");
 
 function bool_formatter(value, row, index) {
     if (value)
@@ -7,7 +7,7 @@ function bool_formatter(value, row, index) {
         return "否";
 }
 
-$user_table.bootstrapTable({
+$project_table.bootstrapTable({
     url: "projects/",
     method: 'GET',
     contentType: "",
@@ -58,7 +58,7 @@ $("#create_user").click(function (event) {
         url: "user/",
         data: create_user_form.serialize(),
         success: function (response) {
-            $user_table.bootstrapTable("refresh");
+            $project_table.bootstrapTable("refresh");
         },
         error: function (response) {
             flash('warning', (response.responseJSON)["message"])
