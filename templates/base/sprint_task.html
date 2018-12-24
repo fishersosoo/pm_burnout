@@ -3,18 +3,18 @@
     <ul id="myTab" class="nav nav-tabs">
         {# 后面根据用户角色选择动态激活哪个面板 #}
         <li class="active"><a href="#task_tab" data-toggle="tab">任务</a></li>
-{#        <li><a href="#role_tab" data-toggle="tab">角色管理</a></li>#}
-{#        <li><a href="#authorization_tab" data-toggle="tab">权限管理</a></li>#}
+        {#        <li><a href="#role_tab" data-toggle="tab">角色管理</a></li>#}
+        {#        <li><a href="#authorization_tab" data-toggle="tab">权限管理</a></li>#}
     </ul>
     <div id="TabContent" class="tab-content">
         <div class="tab-pane fade in active" id="task_tab">
             {# 项目面板 #}
-{#            <div id="user_table_toolbar">#}
-{#                <button type="button" id="add_user_btn" data-toggle="modal" data-target="#new_user_modal"#}
-{#                        class="btn btn-default"><span#}
-{#                        class="glyphicon glyphicon-plus"></span>添加项目#}
-{#                </button>#}
-{#            </div>#}
+            {#            <div id="user_table_toolbar">#}
+            {#                <button type="button" id="add_user_btn" data-toggle="modal" data-target="#new_user_modal"#}
+            {#                        class="btn btn-default"><span#}
+            {#                        class="glyphicon glyphicon-plus"></span>添加项目#}
+            {#                </button>#}
+            {#            </div>#}
             <table id="task_table"
                    class="table table-condensed"
                    data-toolbar="#user_table_toolbar"
@@ -28,6 +28,8 @@
                    data-show-fullscreen="true"
                    data-page-list="[10, 25, 50]"
             ></table>
+            <div id="chart"
+                 style="    margin-bottom: 100px; margin-top: 40px;width: 1570px;height:600px;"></div>
         </div>
         <div class="tab-pane fade" id="role_tab">
 

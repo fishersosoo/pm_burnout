@@ -1,5 +1,7 @@
 var $sprint_table = $("#sprint_table");
 
+
+
 function bool_formatter(value, row, index) {
     if (value)
         return "是";
@@ -13,7 +15,7 @@ $sprint_table.bootstrapTable({
     contentType: "",
     idField: '_id',
     queryParams: function (params) {
-        params["id"]=getQueryString("id")
+        params["id"] = getQueryString("id")
         return params;
     },
     // sortName: "fid",

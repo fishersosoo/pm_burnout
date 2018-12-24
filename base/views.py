@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+from functools import reduce
 
 from bson import ObjectId
 from flask_principal import identity_loaded, identity_changed, Identity, AnonymousIdentity
@@ -180,3 +181,34 @@ def change_task():
         {"sprint_id": ObjectId(sprint_id), "task_id": ObjectId(task_id), "worked_hour": int(hours),
          "submit_data": datetime.datetime.now()})
     return json.jsonify([one for one in mongo.db.project.find()])
+
+
+@base.route("chart_data/", methods=['get'])
+def chart_data():
+    sprint_id = request.args.get("sprint_id")
+    tasks = [one["hour"] for one in mongo.db.task.find({"sprint_id": ObjectId(sprint_id)})]
+
+    ideal_hours = []
+    real_hours = []
+    ideal_remain_hour = reduce(lambda x, y: x + y, tasks)
+    real_remain_hour = ideal_remain_hour
+    ideal_hours.append(ideal_remain_hour)
+    real_hours.append(real_remain_hour)
+    start_time = datetime.datetime.strptime("2018-12-1", "%Y-%m-%d")
+    end_time = datetime.datetime.strptime("2019-1-1", "%Y-%m-%d")
+    ideal_done_hour = ideal_remain_hour / ((end_time - start_time).days)
+    delta = datetime.timedelta(days=1)
+    today = start_time
+    yesterday = today
+    today += delta
+    while today <= end_time:
+        if today < datetime.datetime.now()+delta:
+            for one in mongo.db.work_time.find({"sprint_id": ObjectId(sprint_id), "submit_data":{"$gt": yesterday, "$lte": today}}):
+                real_remain_hour -= int(one["worked_hour"])
+            real_hours.append(real_remain_hour)
+        ideal_remain_hour -= ideal_done_hour
+        ideal_hours.append(ideal_remain_hour)
+        yesterday = today
+        today += delta
+    ideal_hours[-1]=0.
+    return json.jsonify({"ideal": ideal_hours, "real": real_hours})
