@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul id="myTab" class="nav nav-tabs">
+        {# 后面根据用户角色选择动态激活哪个面板 #}
+        <li class="active"><a href="#project_tab" data-toggle="tab">项目</a></li>
+{#        <li><a href="#role_tab" data-toggle="tab">角色管理</a></li>#}
+{#        <li><a href="#authorization_tab" data-toggle="tab">权限管理</a></li>#}
+    </ul>
+    <div id="TabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="project_tab">
+            {# 项目面板 #}
+            <div id="user_table_toolbar">
+                <button type="button" id="add_user_btn" data-toggle="modal" data-target="#new_user_modal"
+                        class="btn btn-default"><span
+                        class="glyphicon glyphicon-plus"></span>添加项目
+                </button>
+            </div>
+            <table id="user_table"
+                   class="table table-condensed"
+                   data-toolbar="#user_table_toolbar"
+                   data-search="true"
+                   data-show-refresh="true"
+                   data-height="700"
+                   data-pagination="true"
+                   data-sortable="true"
+                   data-show-columns="true"
+                   data-show-toggle="true"
+                   data-show-fullscreen="true"
+                   data-page-list="[10, 25, 50]"
+            ></table>
+        </div>
+        <div class="tab-pane fade" id="role_tab">
+
+        </div>
+        <div class="tab-pane fade" id="authorization_tab">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_src %}
+    <script src="/static/base/js/user_tab.js"></script>
+{% endblock %}
+{% block modals %}
+    <div class="modal fade" id="new_user_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document" style="width: 1300px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">创建新账号</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form form-horizontal" method="post" role="form" id="create_user_form">
+                        {{ new_user_form.hidden_tag() }}
+                        {{ wtf.form_errors(new_user_form, hiddens="only") }}
+                        {{ wtf.form_errors(new_user_form, hiddens="only") }}
+                        {% for field in new_user_form.fields %}
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ field.label }}
+                                </div>
+                                <div class="col-md-10">
+                                    {{ wtf.form_field(field,form_type="inline") }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {#                {{ wtf.form_field(new_user_form.submit) }}#}
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="create_user" type="button" class="btn btn-primary" data-dismiss="modal">创建</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

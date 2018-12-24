@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="jumbotron"
+         style="margin-top:150px;margin-left: auto;margin-right: auto;width: 400px;padding-left: 50px;padding-right: 50px">
+        <form class="form form-horizontal" method="post" role="form">
+            <h2>敏捷项目管理</h2>
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+
+            {{ wtf.form_field(form.username) }}
+            {{ wtf.form_field(form.password) }}
+            {{ wtf.form_field(form.remember_me) }}
+            <p></p>
+            {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
+{% endblock %}
