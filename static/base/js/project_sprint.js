@@ -1,4 +1,4 @@
-var $project_table = $("#project_table");
+var $sprint_table = $("#sprint_table");
 
 function bool_formatter(value, row, index) {
     if (value)
@@ -7,17 +7,25 @@ function bool_formatter(value, row, index) {
         return "否";
 }
 
-$project_table.bootstrapTable({
-    url: "projects/",
+$sprint_table.bootstrapTable({
+    url: "/sprints/",
     method: 'GET',
     contentType: "",
     idField: '_id',
+    queryParams: function (params) {
+        params["id"]=getQueryString("id")
+        return params;
+    },
     // sortName: "fid",
     columns: [
         {field: "_id", title: "id", align: 'center', searchable: false, 'visible': false},
         {
-            field: "name", title: "项目名", searchable: true, align: 'center', formatter: function (value, row, index) {
-                herf = "project/?id=" + row["_id"];
+            field: "sprint_name",
+            title: "冲刺名",
+            searchable: true,
+            align: 'center',
+            formatter: function (value, row, index) {
+                herf = "/sprint/?id=" + row["_id"];
                 return [
                     '<a href=' +
                     herf +
@@ -29,7 +37,6 @@ $project_table.bootstrapTable({
                 ].join('');
             }
         },
-        {field: "owner", title: "所有者", searchable: true, align: 'center'},
         {field: "start_time", title: "启动时间", searchable: false, align: 'center'},
         {field: "end_time", title: "结束时间", searchable: false, align: 'center'}
     ]
@@ -58,7 +65,7 @@ $("#create_user").click(function (event) {
         url: "user/",
         data: create_user_form.serialize(),
         success: function (response) {
-            $project_table.bootstrapTable("refresh");
+            $sprint_table.bootstrapTable("refresh");
         },
         error: function (response) {
             flash('warning', (response.responseJSON)["message"])

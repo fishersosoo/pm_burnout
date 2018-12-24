@@ -17,7 +17,7 @@ def init_project():
 
 def init_sprint():
     sprint_id = mongo.db.sprint.insert_one(
-        dict(belong_project="project_1", sprint_name="冲刺1",
+        dict(belong_project="5c20d32db891425d78a32a06", sprint_name="冲刺1",
              start_time=datetime.datetime.strptime("2018-12-1", "%Y-%m-%d"),
              end_time=datetime.datetime.strptime("2018-1-1", "%Y-%m-%d"))
     ).inserted_id
