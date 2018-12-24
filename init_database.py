@@ -2,6 +2,8 @@
 import datetime
 import random
 
+from bson import ObjectId
+
 from pm_burndown import mongo
 
 
@@ -27,16 +29,31 @@ def init_sprint():
                 person=person,
                 task_name=f"task_{one_task}_for_{person}",
                 content=f"finish {one_task} for {person}",
-                hour=random.randint(1,20)
+                hour=random.randint(1, 20),
+                done=False
             ))
 
 
-def init_user():
-    """初始化用户表"""
+def init_work_time(sprint_id):
+    mongo.db.work_time.insert_one(dict(task_id="idasddads",
+                         submit_date=datetime.datetime.now(),
+                         worked_hour=2
+
+    ))
+
+    # for task in mongo.db.task.find({"sprint_id": ObjectId(sprint_id)}):
+    #     if task["hour"]<10:
+    #         for
+    #         workinghour = random.randint(1, 20),
+
+    def init_user():
+        """初始化用户表"""
+
     for i in range(10):
         mongo.db.user.insert_one({"username": f"user_{i}", "latest": True})
 
 
 if __name__ == '__main__':
-    init_project()
-    init_user()
+    init_work_time(1)
+    # init_project()
+    # init_user()
