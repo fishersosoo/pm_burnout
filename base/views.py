@@ -149,14 +149,23 @@ def tasks():
     """
     sprint_id = request.args.get("sprint_id")
     person = current_user.username
-    tasks = [one for one in mongo.db.task.find({"person": person, "sprint_id": sprint_id})]
+    if person != "user_0":
+        tasks = [one for one in mongo.db.task.find({"person": person, "sprint_id": ObjectId(sprint_id)})]
+    else:
+        tasks = [one for one in mongo.db.task.find({"sprint_id": ObjectId(sprint_id)})]
     for task in tasks:
         if task["done"]:
-            task["done_hour"] = task["hour"]
-    return json.jsonify([one for one in mongo.db.task.find()])
+            task["remain_hour"] = 0
+        else:
+            task["remain_hour"] = task["hour"]
+            for one in mongo.db.work_time.find({"task_id": task["_id"]}):
+                task["remain_hour"] -= int(one["worked_hour"])
+            if task["remain_hour"] == 0:
+                task["done"] = True
+    return json.jsonify(tasks)
 
 
-@base.route("change_task/", methods=['POST'])
+@base.route("commit_hour/", methods=['POST'])
 def change_task():
     """
     修改任务状态
@@ -164,4 +173,10 @@ def change_task():
     :return:
     """
 
+    sprint_id = request.form["sprint_id"]
+    task_id = request.form["task_id"]
+    hours = request.form["hours"]
+    mongo.db.work_time.insert_one(
+        {"sprint_id": ObjectId(sprint_id), "task_id": ObjectId(task_id), "worked_hour": int(hours),
+         "submit_data": datetime.datetime.now()})
     return json.jsonify([one for one in mongo.db.project.find()])
