@@ -2,20 +2,20 @@
 {% block content %}
     <ul id="myTab" class="nav nav-tabs">
         {# 后面根据用户角色选择动态激活哪个面板 #}
-        <li class="active"><a href="#project_tab" data-toggle="tab">项目</a></li>
+        <li class="active"><a href="#project_tab" data-toggle="tab">冲刺</a></li>
 {#        <li><a href="#role_tab" data-toggle="tab">角色管理</a></li>#}
 {#        <li><a href="#authorization_tab" data-toggle="tab">权限管理</a></li>#}
     </ul>
     <div id="TabContent" class="tab-content">
-        <div class="tab-pane fade in active" id="project_tab">
+        <div class="tab-pane fade in active" id="sprint_tab">
             {# 项目面板 #}
             <div id="user_table_toolbar">
                 <button type="button" id="add_user_btn" data-toggle="modal" data-target="#new_user_modal"
                         class="btn btn-default"><span
-                        class="glyphicon glyphicon-plus"></span>添加项目
+                        class="glyphicon glyphicon-plus"></span>添加冲刺
                 </button>
             </div>
-            <table id="user_table"
+            <table id="sprint_table"
                    class="table table-condensed"
                    data-toolbar="#user_table_toolbar"
                    data-search="true"
@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block extra_src %}
-    <script src="/static/base/js/index.js"></script>
+    <script src="/static/base/js/project_sprint.js"></script>
 {% endblock %}
 {% block modals %}
     <div class="modal fade" id="new_user_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

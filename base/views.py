@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 
+from bson import ObjectId
 from flask_principal import identity_loaded, identity_changed, Identity, AnonymousIdentity
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -102,8 +103,8 @@ def logout():
 @base.route("project/", methods=['GET'])
 def project_sprint_page():
     """项目中冲刺页面"""
-
-    return render_template('base/project_sprint.html')
+    user_form = NewUserForm()
+    return render_template('base/project_sprint.html', new_user_form=user_form)
 
 
 @base.route("sprint/", methods=['GET'])
@@ -113,8 +114,8 @@ def sprint_task_page():
 
     :return:
     """
-
-    return render_template('base/sprint_task.html')
+    user_form = NewUserForm()
+    return render_template('base/sprint_task.html', new_user_form=user_form)
 
 
 @base.route("projects/", methods=['GET'])
@@ -135,8 +136,8 @@ def sprints():
 
     :return:
     """
-
-    return json.jsonify([one for one in mongo.db.project.find()])
+    project_id = request.args.get("id")
+    return json.jsonify([one for one in mongo.db.sprint.find({"belong_project": project_id})])
 
 
 @base.route("tasks/", methods=['GET'])
@@ -146,8 +147,13 @@ def tasks():
 
     :return:
     """
-
-    return json.jsonify([one for one in mongo.db.project.find()])
+    sprint_id = request.args.get("sprint_id")
+    person = current_user.username
+    tasks = [one for one in mongo.db.task.find({"person": person, "sprint_id": sprint_id})]
+    for task in tasks:
+        if task["done"]:
+            task["done_hour"] = task["hour"]
+    return json.jsonify([one for one in mongo.db.task.find()])
 
 
 @base.route("change_task/", methods=['POST'])
